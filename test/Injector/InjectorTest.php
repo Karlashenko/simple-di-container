@@ -1,7 +1,6 @@
 <?php
 
 use Injector\Blueprints\Injector as InjectorBlueprint;
-use Injector\Exceptions\UninstantiatableClassInjectorException;
 use Injector\Injector;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +15,7 @@ class InjectorTest extends TestCase
         $injector->make(InjectorBlueprint::class);
     }
 
-    public function testInjectorThrowsExceptionWhenClassNotExist()
+    public function testInjectorThrowsExceptionWhenClassDoesNotExist()
     {
         $this->expectException('\Injector\Exceptions\ClassNotFoundInjectorException');
 
