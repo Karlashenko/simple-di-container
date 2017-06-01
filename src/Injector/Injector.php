@@ -4,7 +4,7 @@ namespace Injector;
 
 use Injector\Blueprints\Injector as InjectorBlueprint;
 use Injector\Exceptions\ClassNotFoundInjectorException;
-use Injector\Exceptions\UninstantiatableClassInjectorException;
+use Injector\Exceptions\UninstantiableClassInjectorException;
 use Injector\Traits\Singleton;
 
 class Injector implements InjectorBlueprint
@@ -29,7 +29,7 @@ class Injector implements InjectorBlueprint
      * @inheritdoc
      *
      * @throws \Injector\Exceptions\ClassNotFoundInjectorException
-     * @throws \Injector\Exceptions\UninstantiatableClassInjectorException
+     * @throws \Injector\Exceptions\UninstantiableClassInjectorException
      */
     public function make(string $class, array $parameters = null)
     {
@@ -46,28 +46,28 @@ class Injector implements InjectorBlueprint
         $reflection = new \ReflectionClass($instanceClass);
 
         if (!$reflection->isInstantiable()) {
-            throw new UninstantiatableClassInjectorException("Class '$instanceClass' is not instantiable.");
+            throw new UninstantiableClassInjectorException("Class '$instanceClass' is not instantiable.");
         }
 
         if ($parameters === null) {
             $parameters = $this->resolveParameters($reflection->getConstructor());
         }
 
-        $instance = $reflection->newInstanceArgs($parameters);
-
-        return $instance;
+        return $reflection->newInstanceArgs($parameters);
     }
 
     /**
      * @param \ReflectionMethod $reflectionMethod
      *
      * @return array
+     * @throws \Injector\Exceptions\UninstantiableClassInjectorException
+     * @throws \Injector\Exceptions\ClassNotFoundInjectorException
      */
-    private function resolveParameters(?\ReflectionMethod $reflectionMethod)
+    private function resolveParameters(?\ReflectionMethod $reflectionMethod) : array
     {
         $dependencies = [];
 
-        if ($reflectionMethod == null) {
+        if ($reflectionMethod === null) {
             return $dependencies;
         }
 

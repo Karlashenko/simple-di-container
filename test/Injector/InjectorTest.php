@@ -1,45 +1,47 @@
 <?php
 
+use Injector\Exceptions\ClassNotFoundInjectorException;
+use Injector\Exceptions\UninstantiableClassInjectorException;
 use Injector\Blueprints\Injector as InjectorBlueprint;
 use Injector\Injector;
 use PHPUnit\Framework\TestCase;
 
 class InjectorTest extends TestCase
 {
-    public function testInjectorThrowsExceptionWhenClassIsNotInstantiatable()
+    public function testInjectorThrowsExceptionWhenClassIsNotInstantiable() : void
     {
-        $this->expectException('\Injector\Exceptions\UninstantiatableClassInjectorException');
+        $this->expectException(UninstantiableClassInjectorException::class);
 
         $injector = new Injector();
         $injector->bind(InjectorBlueprint::class, InjectorBlueprint::class);
         $injector->make(InjectorBlueprint::class);
     }
 
-    public function testInjectorThrowsExceptionWhenClassDoesNotExist()
+    public function testInjectorThrowsExceptionWhenClassDoesNotExist() : void
     {
-        $this->expectException('\Injector\Exceptions\ClassNotFoundInjectorException');
+        $this->expectException(ClassNotFoundInjectorException::class);
 
         $injector = new Injector();
         $injector->bind(InjectorBlueprint::class, 'RandomClassNameHere');
         $injector->make(InjectorBlueprint::class);
     }
 
-    public function testInjectorWillTryInstantiateGivenClassIfConainerIsEmpty()
+    public function testInjectorWillTryInstantiateGivenClassIfConainerIsEmpty() : void
     {
         $injector = new Injector();
         $injector->make(Injector::class);
 
-        $this->assertTrue($injector instanceof Injector);
+        $this->assertInstanceOf(Injector::class, $injector);
     }
 
-    public function testInjectorResolvingDependencies()
+    public function testInjectorResolvingDependencies() : void
     {
         $injector = new Injector();
         $injector->bind(InjectorBlueprint::class, Injector::class);
 
         $dummy = $injector->make(Dummy::class);
 
-        $this->assertTrue($dummy->getInjector() instanceof Injector);
+        $this->assertInstanceOf(Injector::class, $dummy->getInjector());
     }
 }
 

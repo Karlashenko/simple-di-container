@@ -24,8 +24,9 @@ trait Singleton
      * @param static $newInstance
      *
      * @return void
+     * @throws \ErrorException
      */
-    public static function setInstance($newInstance)
+    public static function setInstance($newInstance) : void
     {
         if (!($newInstance instanceof static)) {
             throw new \ErrorException("New singleton instance should be of type '{static::class}'.");
